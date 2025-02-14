@@ -1,16 +1,44 @@
-## Hi there 👋
+# 👋 Hi there, I'm Shashi Tharoor!
 
-<!--
-**ShashiTharoor/ShashiTharoor** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+Welcome to my GitHub profile! I'm passionate about technology, software development, and contributing to open-source projects. Here's a bit about me:
 
-Here are some ideas to get you started:
+## 🧑‍💻 About Me
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+- **Name:** Shashi Tharoor
+- **Pronouns:** He/Him
+- **Location:** India
+- **Profession:** Software Developer
+- **Interests:** Coding, Open Source, Machine Learning, Cloud Computing
+
+## 🚀 Skills
+- **Languages:** Python, JavaScript, Java, C++
+- **Web Development:** HTML, CSS, React, Node.js
+- **Frameworks:** Django, Flask, Express.js
+- **Databases:** MySQL, PostgreSQL, MongoDB
+- **Tools:** Git, Docker, Kubernetes
+- **Cloud:** AWS, Azure, Google Cloud
+
+## 🌱 Currently Learning
+- Advanced Machine Learning Techniques
+- Kubernetes and Container Orchestration
+- Blockchain Development
+
+## 📫 How to Reach Me
+- **Email:** [shashi.tharoor@example.com](mailto:shashi.tharoor@example.com)
+- **LinkedIn:** [Shashi Tharoor](https://www.linkedin.com/in/shashitharoor/)
+- **Twitter:** [@ShashiTharoor](https://twitter.com/ShashiTharoor)
+
+## 📈 GitHub Stats
+![Shashi's GitHub stats](https://github-readme-stats.vercel.app/api?username=ShashiTharoor&show_icons=true&theme=radical)
+
+## 🏆 Achievements
+- Contributed to **50+** open-source projects
+- Speaker at **Tech Conferences** and **Meetups**
+- Authored **5** technical blogs on Medium
+
+## 💬 Let's Connect
+I'm always open to collaborating on interesting projects and discussing new ideas. Feel free to reach out to me!
+
+Thank you for visiting my profile!
+
+![Profile Views](https://komarev.com/ghpvc/?username=ShashiTharoor&color=blue)
