@@ -15,10 +15,6 @@ document.querySelectorAll(".progress-ring").forEach((ring) => {
     ring.style.background = `conic-gradient(cyan ${percent}%, transparent ${percent}%)`;
 });
 
-// Typewriter Effect (Already handled in CSS)
-
-// 3D Cube Rotation (Already handled in CSS)
-
 // Game Logic
 const gameContainer = document.querySelector(".game-container");
 const spaceship = document.getElementById("spaceship");
@@ -37,7 +33,6 @@ document.addEventListener("keydown", (e) => {
     if (isGameOver) return;
 
     const step = 5; // Movement speed
-    const containerRect = gameContainer.getBoundingClientRect();
 
     if (e.key === "ArrowUp" && spaceshipPosition.y > 10) {
         spaceshipPosition.y -= step;
@@ -53,7 +48,7 @@ document.addEventListener("keydown", (e) => {
     spaceship.style.top = `${spaceshipPosition.y}%`;
 });
 
-// Spawn Crystals and Black Holes
+// Spawn Crystals
 function spawnCrystal() {
     const crystal = document.createElement("div");
     crystal.classList.add("crystal");
@@ -69,6 +64,7 @@ function spawnCrystal() {
     }, 10000);
 }
 
+// Spawn Black Holes
 function spawnBlackHole() {
     const blackHole = document.createElement("div");
     blackHole.classList.add("black-hole");
