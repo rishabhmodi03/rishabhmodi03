@@ -1,10 +1,10 @@
-# 👋 Hi there, I'm Shashi Tharoor!
+# 👋 Hi there, I'm Rishabh Modi!
 
 Welcome to my GitHub profile! I'm passionate about technology, software development, and contributing to open-source projects. Here's a bit about me:
 
 ## 🧑‍💻 About Me
 
-- **Name:** Shashi Tharoor
+- **Name:** Rishabh Modi
 - **Pronouns:** He/Him
 - **Location:** India
 - **Profession:** Software Developer
@@ -24,9 +24,8 @@ Welcome to my GitHub profile! I'm passionate about technology, software developm
 - Blockchain Development
 
 ## 📫 How to Reach Me
-- **Email:** [shashi.tharoor@example.com](mailto:shashi.tharoor@example.com)
-- **LinkedIn:** [Shashi Tharoor](https://www.linkedin.com/in/shashitharoor/)
-- **Twitter:** [@ShashiTharoor](https://twitter.com/ShashiTharoor)
+- **LinkedIn:** [Shashi Tharoor](https://www.linkedin.com/in/)
+- **Twitter:** [@ShashiTharoor](https://twitter.com)
 
 ## 📈 GitHub Stats
 ![Shashi's GitHub stats](https://github-readme-stats.vercel.app/api?username=ShashiTharoor&show_icons=true&theme=radical)
