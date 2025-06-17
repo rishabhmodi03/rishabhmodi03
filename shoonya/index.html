@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brokerage & Profit Calculator</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827; /* Dark background */
+        }
+        .gradient-bg {
+            background: radial-gradient(circle at top, rgba(30,41,59,0.5), transparent 70%), #111827;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.5); /* Semi-transparent background */
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem; /* More rounded corners */
+        }
+        .input-field {
+            background-color: #1f2937;
+            border: 1px solid #4b5563;
+            color: #f3f4f6;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.4);
+        }
+        .btn-primary {
+            background: linear-gradient(to right, #3b82f6, #6366f1);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+        }
+        .profit {
+            color: #22c55e; /* Green */
+        }
+        .loss {
+            color: #ef4444; /* Red */
+        }
+        #results-container {
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+        }
+        .hidden-initial {
+            opacity: 0;
+            transform: translateY(20px);
+            display: none;
+        }
+        .visible-final {
+            opacity: 1;
+            transform: translateY(0);
+            display: grid;
+        }
+        /* Custom modal for errors */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            background: #1f2937;
+            padding: 2rem;
+            border-radius: 1rem;
+            border: 1px solid #4b5563;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+        .modal-backdrop.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-backdrop.active .modal-content {
+            transform: scale(1);
+        }
+    </style>
+</head>
+<body class="gradient-bg text-gray-200">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8 max-w-4xl">
+        
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-3xl sm:text-4xl font-bold text-white">Brokerage & Profit Calculator</h1>
+            <p class="text-gray-400 mt-2">Analyze your trades with precision and gain valuable insights.</p>
+        </header>
+
+        <!-- Calculator Form -->
+        <div id="calculator" class="glass-card p-6 sm:p-8 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Input: Buy Amount -->
+                <div>
+                    <label for="buy_amt" class="block text-sm font-medium text-gray-300 mb-2">Buy Price (per share)</label>
+                    <input type="number" id="buy_amt" class="input-field w-full p-3 rounded-lg" placeholder="e.g., 100">
+                </div>
+                <!-- Input: Sell Amount -->
+                <div>
+                    <label for="sell_amt" class="block text-sm font-medium text-gray-300 mb-2">Sell Price (per share)</label>
+                    <input type="number" id="sell_amt" class="input-field w-full p-3 rounded-lg" placeholder="e.g., 110">
+                </div>
+                <!-- Input: Quantity -->
+                <div>
+                    <label for="qty" class="block text-sm font-medium text-gray-300 mb-2">Quantity</label>
+                    <input type="number" id="qty" class="input-field w-full p-3 rounded-lg" placeholder="e.g., 50">
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="results-container" class="hidden-initial grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Card 1: Summary -->
+            <div class="glass-card p-6 flex flex-col justify-between col-span-1 lg:col-span-3">
+                <div>
+                    <h3 class="font-bold text-xl text-white mb-4">Trade Summary</h3>
+                    <div id="summary-net-pl" class="text-center mb-4">
+                        <p class="text-gray-400 text-sm">Net Profit / Loss</p>
+                        <p id="net-pl" class="text-4xl font-bold">-</p>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+                        <div>
+                            <p class="text-gray-400 text-sm">Total Buy Value</p>
+                            <p id="total-buy" class="text-lg font-semibold">-</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-400 text-sm">Total Sell Value</p>
+                            <p id="total-sell" class="text-lg font-semibold">-</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-400 text-sm">Brokerage & Charges</p>
+                            <p id="charges" class="text-lg font-semibold">-</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Breakeven Analysis -->
+            <div class="glass-card p-6">
+                <h3 class="font-bold text-xl text-white mb-4">Breakeven Analysis</h3>
+                <p class="text-gray-400 mb-2">To avoid loss, you need to sell at or above:</p>
+                <p id="breakeven-price" class="text-2xl font-bold text-blue-400">-</p>
+                <p class="text-gray-400 text-sm mt-1">per share</p>
+            </div>
+
+            <!-- Card 3: Scenario Analysis -->
+            <div class="glass-card p-6">
+                <h3 class="font-bold text-xl text-white mb-4">Scenario Analysis</h3>
+                <div class="space-y-4">
+                    <div>
+                        <p class="text-gray-300">If price rises 1% from buy:</p>
+                        <p id="profit-1-percent-up" class="text-lg font-semibold">-</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-300">If price drops 1% from buy:</p>
+                        <p id="loss-1-percent-down" class="text-lg font-semibold">-</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4: Key Insights -->
+            <div class="glass-card p-6">
+                 <h3 class="font-bold text-xl text-white mb-4">Key Insight</h3>
+                 <p id="insight" class="text-gray-300 leading-relaxed">-</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div id="error-modal" class="modal-backdrop">
+        <div class="modal-content text-center w-11/12 max-w-sm">
+            <h3 class="text-xl font-bold text-white mb-2">Invalid Input</h3>
+            <p id="error-message" class="text-gray-300 mb-6">Please fill all fields with positive numbers.</p>
+            <button id="close-modal-btn" class="btn-primary text-white font-bold py-2 px-6 rounded-lg">
+                OK
+            </button>
+        </div>
+    </div>
+
+
+    <script>
+        // --- DOM Element Selection ---
+        // Inputs
+        const buyAmtEl = document.getElementById('buy_amt');
+        const sellAmtEl = document.getElementById('sell_amt');
+        const qtyEl = document.getElementById('qty');
+        
+        // Results Container
+        const resultsContainer = document.getElementById('results-container');
+        
+        // Summary Card
+        const netPlEl = document.getElementById('net-pl');
+        const totalBuyEl = document.getElementById('total-buy');
+        const totalSellEl = document.getElementById('total-sell');
+        const chargesEl = document.getElementById('charges');
+
+        // Analysis Cards
+        const breakevenEl = document.getElementById('breakeven-price');
+        const profit1UpEl = document.getElementById('profit-1-percent-up');
+        const loss1DownEl = document.getElementById('loss-1-percent-down');
+        const insightEl = document.getElementById('insight');
+
+        // Error Modal
+        const errorModal = document.getElementById('error-modal');
+        const errorMessageEl = document.getElementById('error-message');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        
+        // --- Event Listeners ---
+        const inputs = [buyAmtEl, sellAmtEl, qtyEl];
+        inputs.forEach(input => {
+            // Calculate on key release for real-time updates
+            input.addEventListener('keyup', calculate); 
+        });
+
+        closeModalBtn.addEventListener('click', () => {
+            errorModal.classList.remove('active');
+        });
+
+        // --- Core Calculation Logic ---
+        function calculate() {
+            // 1. Get and validate inputs
+            const buyAmt = parseFloat(buyAmtEl.value);
+            const sellAmt = parseFloat(sellAmtEl.value);
+            const qty = parseFloat(qtyEl.value);
+
+            // If any field is empty or not a positive number, don't calculate
+            if (!buyAmt || !sellAmt || !qty) {
+                 hideResults();
+                 return;
+            }
+            if (buyAmt <= 0 || sellAmt <= 0 || qty <= 0) {
+                showError("Please enter positive values for all fields.");
+                hideResults();
+                return;
+            }
+
+            // 2. Perform Calculations
+            const totalBuyValue = buyAmt * qty;
+            const totalSellValue = sellAmt * qty;
+            
+            // Brokerage: 0.035% of sell value + 10
+            const brokerage = (totalSellValue * 0.00035) + 10;
+            
+            const grossPl = totalSellValue - totalBuyValue;
+            const netPl = grossPl - brokerage;
+
+            // Breakeven price calculation
+            // Formula derived from: (BE_Price * qty) - (buy_amt * qty) - ((BE_Price * qty * 0.00035) + 10) = 0
+            const breakevenPrice = (totalBuyValue + 10) / (qty * (1 - 0.00035));
+
+            // Scenario Analysis: 1% up
+            const sellPrice1Up = buyAmt * 1.01;
+            const totalSell1Up = sellPrice1Up * qty;
+            const brokerage1Up = (totalSell1Up * 0.00035) + 10;
+            const netPl1Up = (totalSell1Up - totalBuyValue) - brokerage1Up;
+            
+            // Scenario Analysis: 1% down
+            const sellPrice1Down = buyAmt * 0.99;
+            const totalSell1Down = sellPrice1Down * qty;
+            const brokerage1Down = (totalSell1Down * 0.00035) + 10;
+            const netPl1Down = (totalSell1Down - totalBuyValue) - brokerage1Down;
+
+            // 3. Update the UI
+            updateUI({
+                netPl,
+                totalBuyValue,
+                totalSellValue,
+                brokerage,
+                breakevenPrice,
+                netPl1Up,
+                netPl1Down
+            });
+        }
+        
+        // --- UI Update Functions ---
+        function updateUI(data) {
+            // Format to Indian Rupee style
+            const formatCurrency = (num) => `₹ ${num.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+            // Update Summary
+            netPlEl.textContent = formatCurrency(data.netPl);
+            netPlEl.className = `text-4xl font-bold ${data.netPl >= 0 ? 'profit' : 'loss'}`;
+            totalBuyEl.textContent = formatCurrency(data.totalBuyValue);
+            totalSellEl.textContent = formatCurrency(data.totalSellValue);
+            chargesEl.textContent = formatCurrency(data.brokerage);
+
+            // Update Breakeven
+            breakevenEl.textContent = formatCurrency(data.breakevenPrice);
+            
+            // Update Scenarios
+            profit1UpEl.textContent = formatCurrency(data.netPl1Up);
+            profit1UpEl.className = `text-lg font-semibold ${data.netPl1Up >= 0 ? 'profit' : 'loss'}`;
+            loss1DownEl.textContent = formatCurrency(data.netPl1Down);
+            loss1DownEl.className = `text-lg font-semibold ${data.netPl1Down >= 0 ? 'profit' : 'loss'}`;
+            
+            // Update Insight
+            updateInsight(data.netPl, data.breakevenPrice, parseFloat(sellAmtEl.value));
+
+            // Show results container with animation
+            showResults();
+        }
+
+        function updateInsight(netPl, breakevenPrice, sellAmt) {
+            if (netPl > 0) {
+                 if(sellAmt > breakevenPrice * 1.05) { // more than 5% above breakeven
+                    insightEl.innerHTML = "This is a <strong class='profit'>strong profitable trade</strong>. Your sell price significantly surpassed the breakeven point, securing a solid gain.";
+                 } else {
+                    insightEl.innerHTML = "Good job! You've made a <strong class='profit'>profit</strong>. Your sell price was successfully above the required breakeven point.";
+                 }
+            } else {
+                if(sellAmt < breakevenPrice) {
+                    insightEl.innerHTML = "This trade resulted in a <strong class='loss'>loss</strong>. Your sell price was below the breakeven point. Consider analyzing entry/exit points for future trades.";
+                } else {
+                     insightEl.innerHTML = "Even though you sold above the buy price, the trade resulted in a slight <strong class='loss'>loss</strong> due to brokerage fees. You were very close to the breakeven point.";
+                }
+            }
+        }
+
+        function hideResults() {
+             if (!resultsContainer.classList.contains('hidden-initial')) {
+                resultsContainer.classList.remove('visible-final');
+                resultsContainer.classList.add('hidden-initial');
+            }
+        }
+
+        function showResults() {
+            if (resultsContainer.classList.contains('hidden-initial')) {
+                resultsContainer.classList.remove('hidden-initial');
+                resultsContainer.classList.add('visible-final');
+            }
+        }
+
+        function showError(message) {
+            errorMessageEl.textContent = message;
+            errorModal.classList.add('active');
+        }
+
+    </script>
+</body>
+</html>
